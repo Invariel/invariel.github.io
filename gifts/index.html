@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+	<head>
+		<title>Gifts for Your Friends</title>
+
+		<style>
+			table
+			{
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+
+			tr
+			{
+				border: 1px solid black;
+			}
+
+			td
+			{
+				border: 1px solid black;
+				margin: 1px 3px;
+				max-width: 100px;
+				text-align: center;
+				word-wrap: break-word;
+			}
+		</style>
+	</head>
+
+	<body>
+		<table id="giftsTable">
+		</table>
+
+		<table id="renovationsTable">
+		</table>
+	</body>
+
+	<script type="text/javascript">
+		// Constants and stuff.
+		//let renovationProgressUrl = 'https://www.blaseball.com/database/renovationProgress?id=6bfd22e7-831d-4ba9-a9f9-2cf7ab00c39d';
+		//let giftShopUrl = 'https://www.blaseball.com/database/giftProgress';
+
+		let giftsTable = document.getElementById ("giftsTable");
+		let renovationsTable = document.getElementById ("renovationsTable");
+
+		let giftShopUrl = 'https://api.sibr.dev/proxy/database/giftProgress';
+		let renovationProgressUrl = 'https://api.sibr.dev/proxy/database/renovationProgress?id=6bfd22e7-831d-4ba9-a9f9-2cf7ab00c39d';
+
+		let teams = [
+			[ "Atlantis Georgias", "d9f89a8a-c563-493e-9d64-78e4f9a55d4a" ],
+			[ "Baltimore Crabs", "8d87c468-699a-47a8-b40d-cfb73a5660ad" ],
+			[ "Boston Flowers", "3f8bbb15-61c0-4e3f-8e4a-907a5fb1565e" ],
+			[ "Breckenridge Jazz Hands", "a37f9158-7f82-46bc-908c-c9e2dda7c33b" ],
+			[ "Canada Moist Talkers", "eb67ae5e-c4bf-46ca-bbbc-425cd34182ff" ],
+			[ "Charleston Shoe Thieves", "bfd38797-8404-4b38-8b82-341da28b1f83" ],
+			[ "Chicago Firefighters", "ca3f1c8c-c025-4d8e-8eef-5be6accbeb16" ],
+			[ "Core Mechanics", "46358869-dce9-4a01-bfba-ac24fc56f57e" ],
+			[ "Dallas Steaks", "b024e975-1c4a-4575-8936-a3754a08806a" ],
+			[ "Hades Tigers", "747b8e4a-7e50-4638-a973-ea7950a3e739" ],
+			[ "Hawai'i Fridays", "979aee4a-6d80-4863-bf1c-ee1a78e06024" ],
+			[ "Hellmouth Sunbeams", "f02aeae2-5e6a-4098-9842-02d2273f25c7" ],
+			[ "Houston Spies", "9debc64f-74b7-4ae1-a4d6-fce0144b6ea5" ],
+			[ "Kansas City Breath Mints", "adc5b394-8f76-416d-9ce9-813706877b84" ],
+			[ "LA Unlimited Tacos", "878c1bf6-0d21-4659-bfee-916c8314d69c" ],
+			[ "Mexico City Wild Wings", "57ec08cc-0411-4643-b304-0e80dbc15ac7" ],
+			[ "Miami Dale", "b63be8c2-576a-4d6e-8daf-814f8bcea96f" ],
+			[ "New York Millennials", "36569151-a2fb-43c1-9df7-2df512424c82" ],
+			[ "Ohio Worms", "bb4a9de5-c924-4923-a0cb-9d1445f1ee5d" ],
+			[ "Philly Pies", "23e4cbc1-e9cd-47fa-a35b-bfa06f726cb7" ],
+			[ "San Francisco Lovers", "b72f3061-f573-40d7-832a-5ad475bd7909" ],
+			[ "Seattle Garages", "105bc3ff-1320-4e37-8ef0-8d595cb95dd0" ],
+			[ "Tokyo Lift", "c73b705c-40ad-4633-a6ed-d357ee2e2bcf" ],
+			[ "Yellowstone Magic", "7966eb04-efcc-499b-8f03-d13916330531" ],
+		];
+
+		let gifts = [
+			"ambitious_solo", "bargain_bin", "chorby_soul_replica", "fireproof_team", "fourth_strike_solo", "gravity_team",
+			"home_field_team", "late_to_party_team", "life_of_party_team", "nagomi_mcdaniel_replica", "random_player_handcrafted_bat", "random_player_handcrafted_broom",
+			"random_player_handcrafted_cannon", "random_player_handcrafted_cap", "random_player_handcrafted_glove", "random_player_handcrafted_helmet", "random_player_handcrafted_shoes", "random_player_handcrafted_socks",
+			"soul_patches_10", "soundproof_team", "walk_in_park", "york_silk_replica" ];
+
+		fetch (giftShopUrl)
+			.then (function (response) {
+				console.log (response);
+				return response.json();
+			})
+			.then (function (response) {
+				teams.forEach (team => GenerateGiftShopRow (team, response));
+			})
+			.catch (function (error) {
+				console.log ("An error occurred while fetching gift shop information.");
+			});
+
+/*
+		fetch (renovationProgressUrl, { mode: 'no-cors' })
+			.then (function (response) {
+				return response.json();
+			})
+			.then (function (json) {
+				console.log ("Renovations Response:");
+				console.log (json);
+			})
+			.catch (function (error) {
+				console.log ("An error occurred while fetching renovation progress information.");
+			});
+*/
+
+		var tr = giftsTable.insertRow (-1);
+		[ "Team Name", "Gifts", "Progress", "Ambitious", "Bargain Bin", "Chorby", "Fireproof", "Fourth Strike", "Gravity", "Home Field Advantage", "Late to the Party", "Life of the Party", "Nagomi", "Handcrafted Bat", "Handcrafted Broom", "Handrafted Cannon", "Handcrafted Cap", "Handcrafted Glove", "Handcrafted Helmet", "Handcrafted Shoes", "Handcrafted Socks", "Soul Patches", "Soundproof", "Walk in the Park", "York Silk Replica" ].forEach (e => { c = tr.insertCell(-1); c.innerHTML = e; });
+
+		function GenerateGiftShopRow (team, response)
+		{
+			let teamname = team[0];
+			let teamGUID = team[1];
+
+			let wishlist = response["teamWishLists"][teamGUID];
+			let progress = response["teamProgress"][teamGUID];
+
+			let tr = giftsTable.insertRow (-1);
+
+			var c1 = tr.insertCell (-1);
+			c1.innerHTML = teamname;
+
+			var c2 = tr.insertCell (-1);
+			c2.innerHTML = progress["total"];
+
+			var c3 = tr.insertCell (-1);
+			c3.innerHTML = (progress["toNext"] * 100).toFixed(1) + "%";
+
+			let values = { };
+			gifts.forEach (gift => { values[gift] = 0.0 });
+			wishlist.forEach (index => { values[index["bonus"]] = index["percent"] });
+
+			topThree = GetTopThree (values);
+
+			gifts.forEach(element =>
+				{
+					var c = tr.insertCell (-1);
+					if (values.hasOwnProperty (element))
+					{
+						c.innerHTML = (values[element] * 100).toFixed (1) + "%";
+
+						if (values[element] == topThree[0])
+						{
+							c.style.backgroundColor = "gold";
+						}
+						else if (values[element] == topThree[1])
+						{
+							c.style.backgroundColor = "green";
+						}
+						else if (values[element] == topThree[2])
+						{
+							c.style.backgroundColor = "grey";
+						}
+					}
+					else
+					{
+						c.innerHTML = "0";
+					}
+				});
+		}
+
+		function GetTopThree (values)
+		{
+			var vals = { };
+			gifts.forEach (element => { vals[element] = values[element] });
+
+			sortedKeys = Object.keys(vals).sort ((v1, v2) => vals[v2] - vals[v1]);
+
+			return [ values[sortedKeys[0]], values[sortedKeys[1]], values[sortedKeys[2]] ];
+		}
+	</script>
+</html>
