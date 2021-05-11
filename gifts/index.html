@@ -5,6 +5,11 @@
 		<title>Gifts for Your Friends</title>
 
 		<style>
+			display
+			{
+				display: inline-block;
+			}
+			
 			table
 			{
 				border: 1px solid black;
@@ -24,6 +29,21 @@
 				text-align: center;
 				word-wrap: break-word;
 			}
+			
+			.first
+			{
+				background-color: #00FF80;
+			}
+			
+			.second
+			{
+				background-color: #FFFF69;
+			}
+			
+			.third
+			{
+				background-color: #19F0FF;
+			}
 		</style>
 	</head>
 
@@ -33,6 +53,11 @@
 
 		<table id="renovationsTable">
 		</table>
+		<div class="inline">
+			<p class="display first">First place.</p>
+			<p class="display second">Second place.</p>
+			<p class="display third">Third place.</p>
+		</div>
 	</body>
 
 	<script type="text/javascript">
@@ -150,15 +175,15 @@
 
 						if (values[element] == topThree[0])
 						{
-							c.style.backgroundColor = "#00FF80";
+							c.classList.add("first");
 						}
 						else if (values[element] == topThree[1])
 						{
-							c.style.backgroundColor = "#FFFF69";
+							c.classList.add("second");
 						}
 						else if (values[element] == topThree[2])
 						{
-							c.style.backgroundColor = "#19F0FF";
+							c.classList.add("third");
 						}
 					}
 					else
