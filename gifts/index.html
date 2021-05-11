@@ -78,6 +78,13 @@
 			"home_field_team", "late_to_party_team", "life_of_party_team", "nagomi_mcdaniel_replica", "random_player_handcrafted_bat", "random_player_handcrafted_broom",
 			"random_player_handcrafted_cannon", "random_player_handcrafted_cap", "random_player_handcrafted_glove", "random_player_handcrafted_helmet", "random_player_handcrafted_shoes", "random_player_handcrafted_socks",
 			"soul_patches_10", "soundproof_team", "walk_in_park", "york_silk_replica" ];
+		
+		let headers = [
+			"Team Name", "Gifts", "Progress",
+			"Ambitious", "Bargain Bin", "Chorby", "Fireproof", "Fourth Strike", "Gravity",
+			"Home Field Advantage", "Late to the Party", "Life of the Party", "Nagomi", "Handcrafted Bat", "Handcrafted Broom",
+			"Handrafted Cannon", "Handcrafted Cap", "Handcrafted Glove", "Handcrafted Helmet", "Handcrafted Shoes", "Handcrafted Socks",
+			"Soul Patches", "Soundproof", "Walk in the Park", "York Silk Replica" ];
 
 		fetch (giftShopUrl)
 			.then (function (response) {
@@ -106,7 +113,7 @@
 */
 
 		var tr = giftsTable.insertRow (-1);
-		[ "Team Name", "Gifts", "Progress", "Ambitious", "Bargain Bin", "Chorby", "Fireproof", "Fourth Strike", "Gravity", "Home Field Advantage", "Late to the Party", "Life of the Party", "Nagomi", "Handcrafted Bat", "Handcrafted Broom", "Handrafted Cannon", "Handcrafted Cap", "Handcrafted Glove", "Handcrafted Helmet", "Handcrafted Shoes", "Handcrafted Socks", "Soul Patches", "Soundproof", "Walk in the Park", "York Silk Replica" ].forEach (e => { c = tr.insertCell(-1); c.innerHTML = e; });
+		headers.forEach (e => { c = tr.insertCell(-1); c.innerHTML = e; });
 
 		function GenerateGiftShopRow (team, response)
 		{
@@ -133,6 +140,7 @@
 
 			topThree = GetTopThree (values);
 
+			var count = 0;
 			gifts.forEach(element =>
 				{
 					var c = tr.insertCell (-1);
@@ -157,6 +165,8 @@
 					{
 						c.innerHTML = "0";
 					}
+					c.title = teamname + " " + headers[count + 3] + " " + (values[element] * 100).toFixed(1) + "%";
+					++ count;
 				});
 		}
 
