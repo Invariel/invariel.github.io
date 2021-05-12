@@ -159,7 +159,7 @@
 			c2.innerHTML = progress["total"];
 
 			var c3 = tr.insertCell (-1);
-			c3.innerHTML = (progress["toNext"] * 100).toFixed(1) + "%";
+			c3.innerHTML = (progress["toNext"] * 100).toFixed(0) + "%";
 
 			let values = { };
 			gifts.forEach (gift => { values[gift] = 0.0 });
@@ -192,7 +192,7 @@
 					{
 						c.innerHTML = "0";
 					}
-					c.title = teamname + ", " + headers[count + 3] + ", " + (values[element] * 100).toFixed(1) + "%";
+					c.title = teamname + ", " + headers[count + 3] + ", " + (values[element] * 100).toFixed(0) + "%";
 					++ count;
 				});
 		}
