@@ -31,21 +31,6 @@
 				text-align: center;
 				word-wrap: break-word;
 			}
-			
-			.first
-			{
-				background-color: #00FF80;
-			}
-			
-			.second
-			{
-				background-color: #FFFF69;
-			}
-			
-			.third
-			{
-				background-color: #19F0FF;
-			}
 		</style>
 	</head>
 
@@ -165,7 +150,7 @@
 			gifts.forEach (gift => { values[gift] = 0.0 });
 			wishlist.forEach (index => { values[index["bonus"]] = index["percent"] });
 
-			topThree = GetTopThree (values);
+			topValues = GetTop (values, progress["total"] + 2);
 
 			var count = 0;
 			gifts.forEach(element =>
@@ -174,18 +159,13 @@
 					if (values.hasOwnProperty (element))
 					{
 						c.innerHTML = (values[element] * 100).toFixed (0) + "%";
-
-						if (values[element] == topThree[0])
+						
+						for (var i = 0; i < topValues.length; ++ i)
 						{
-							c.classList.add("first");
-						}
-						else if (values[element] == topThree[1])
-						{
-							c.classList.add("second");
-						}
-						else if (values[element] == topThree[2])
-						{
-							c.classList.add("third");
+							if (values[element] == topValues[i])
+							{
+								c.style.backgroundColor = rgb(255 - 8 * i, 0 + 8 * i, 0);
+							}
 						}
 					}
 					else
@@ -197,14 +177,20 @@
 				});
 		}
 
-		function GetTopThree (values)
+		function GetTop (values, amount)
 		{
 			var vals = { };
 			gifts.forEach (element => { vals[element] = values[element] });
 
 			sortedKeys = Object.keys(vals).sort ((v1, v2) => vals[v2] - vals[v1]);
+			
+			var retval = [ ];
+			for (var i = 0; i < (Math.Min(amount, Object.keys(vals).length); ++ i)
+			{
+				retval.push(sortedKeys[i]);
+			}
 
-			return [ values[sortedKeys[0]], values[sortedKeys[1]], values[sortedKeys[2]] ];
+			return retval;
 		}
 	</script>
 </html>
