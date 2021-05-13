@@ -164,7 +164,11 @@
 						{
 							if (values[element] == topValues[i])
 							{
-								c.style.backgroundColor = "rgb(" + (255 - 8 * i) + "," + (0 + 8 * i) + ", 0)";
+								var red = Math.max (255 * 8 - i, 0);
+								var green = Math.min (8 * i, 255);
+								var blue = Math.min (8 * i, 255);
+								
+								c.style.backgroundColor = "rgb(" + red + "," + green + "," + blue + ")";
 							}
 						}
 					}
