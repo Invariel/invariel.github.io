@@ -133,14 +133,14 @@
 			let values = { };
 			gifts.forEach (gift => { values[gift] = 0.0 });
 			
-			if (wishlist !=== undefined)
+			if (wishlist !== undefined)
 			{
 				wishlist.forEach (index => { values[index["bonus"]] = index["percent"] });
 				topValues = GetTop (values, Math.max(3, progress["total"] + 2));
 			}
 			else
 			{
-				topValues = 0.0;
+				topValues = [ 0.0 ];
 			}
 
 			var count = 0;
