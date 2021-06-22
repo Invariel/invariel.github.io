@@ -5,6 +5,12 @@
 		<title>Gifts for Your Friends</title>
 
 		<style>
+			h2
+			{
+				text-align: center;
+				text-decoration: underline;
+			}
+
 			p
 			{
 				display: inline-block;
@@ -35,6 +41,7 @@
 	</head>
 
 	<body>
+		<h2>Gift Shop Progress</h2>
 		<table id="giftsTable">
 		</table>
 
@@ -75,20 +82,18 @@
 		];
 
 		let gifts = [
-			"aldon_cashmoney_replica_lineup_3", "ambitious_solo", "bargain_bin", "chorby_soul_replica_lineup", "chorby_soul_replica_rotation",
-			"early_to_party_team", "edense_item_infusion", "fireproof_team", "goodwin_morin_replica_lineup_1", "gravity_team",
-			"late_to_party_team", "nagomi_mcdaniel_replica_rotation", "pitching_machine_replica_lineup", "random_player_handcrafted_phone", "random_player_handcrafted_quill",
-			"soul_patches_10", "soundproof_team", "subtractor_bat_drop", "unambitious_solo", "underhanded_cap_drop",
-			"valentine_games_replica_lineup",
+			"adense_item_infusion", "ambitious_solo", "bargain_bin", "chorby_soul_replica_active_item", "early_to_party_team",
+			"edense_item_infusion", "fireproof_team", "gravity_team", "late_to_party_team", "liquid_friend_replica_lineup",
+			"pitching_machine_replica_siphon", "soul_patches_10", "soundproof_team", "unambitious_solo", "uncle_plasma_replica_rotation",
+			"valentine_games_replica_lineup_4", "york_silk_replica_lineup_item",
 		];
 		
 		let headers = [
 			"Team Name", "Gifts", "Progress",
-			"Aldon Cashmoney", "Ambitious", "Bargain Bin", "Chorby (Lineup)", "Chorby (Rotation)",
-			"Early to the Party (Team)", "eDense Infusion", "Fireproof", "Goodwin Morin (Lineup)", "Gravity",
-			"Late to the Party", "Nagomi McDaniel (Rotation)", "Pitching Machine (Lineup)", "Handcrafted Phone", "Handcrafted Quill",
-			"Soul Patches", "Soundproof", "Subtractor Bat Drop", "Unambitious", "Underhanded Cap",
-			"Valentine Games (Lineup)"
+			"aDense Infusion", "Ambitious, Solo Edition", "Bargain Bin", "Chorby Soul, Soul Edition", "Early to the Party, Team Edition",
+			"eDense Infusion", "Fireproof, Team Edition", "Gravity, Team Edition", "Late to the Party, Team Edition", "Liquid Friend, Mint Edition",
+			"Pitching Machine, Siphon Edition", "Soul Patches", "Soundproof, Team Edition", "Unambitious, Solo Edition", "Uncle Plasma, Mint Edition",
+			"Valentine Games, Cleanup Edition", "York Silk, Vibe Check Edition"
 		];
 
 		fetch (giftShopUrl)
