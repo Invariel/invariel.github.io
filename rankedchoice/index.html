@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			#page
+			{
+				width: 100%;
+				height: 100%;
+
+				display: grid;
+				grid-template-areas:
+				"a a a"
+				"b b c";
+			}
+
+			#top
+			{
+				margin: 0 auto 1em;
+				grid-area: a;
+			}
+
+
+			#left
+			{
+				grid-area: b;
+			}
+
+			#right
+			{
+				grid-area: c;
+
+				border-left: 2px solid darkblue;
+
+				padding: 1em;
+			}
+
+			.spacer
+			{
+				margin: 0 5em;
+			}
+
+			.title
+			{
+				font-size: x-large;
+				font-weight: bold;
+				text-decoration: underline;
+			}
+
+			textarea
+			{
+				width: 99%;
+				height: 30em;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="page">
+
+			<div id="top">
+				<p class="title">Ranked Choice Processor</p>
+			</div>
+
+			<div id="left">
+				<label for="chk_public" title="Select this if your data has who voted for whom.">Public Voting:</label>
+				<input type="checkbox" id="chk_public" title="Select this if your data has who voted for whom.">
+				<span class="spacer" />
+
+				<label for="drp_separator" title="Which character separates your data columns?">Separator:</label>
+				<select id="drp_separator" title="Which character separates your data columns?">
+					<option value="&#9;">Tab</option>
+					<option value=" ">Space</option>
+					<option value=",">,</option>
+					<option value=";">;</option>
+					<option value="_">_</option>
+				</select>
+				<span class="spacer" />
+
+				<label for="numud_threshold" title="What percentage of votes is required to win?  (Default is 50.)">Threshold:</label>
+				<input type="number" id="numud_threshold" title="What percentage of votes is required to win?  (Default is 50.)" value=50 min=0 max=100 />
+				<span class="spacer" />
+
+				<button onClick="calculate_ranked_choice (); return false;">Vote</button>
+				<span class="spacer" />
+
+				<button onClick="clear_form (); return false;">Clear</button>
+
+				<p />
+
+				<textarea id="txt_votes" placeholder="Paste your vote text here." autofocus></textarea>
+			</div>
+
+			<div id="right">
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		let chk_public = document.getElementById ("chk_public");
+		let drp_separator = document.getElementById ("drp_separator");
+		let numud_threshold = document.getElementById ("numud_threshold");
+		let txt_votes = document.getElementById ("txt_votes");
+
+		let vote_tracing = document.getElementById ("right");
+
+
+		function clear_votes ()
+		{
+			while (vote_tracing.firstChild !== undefined && vote_tracing.firstChild !== null)
+			{
+				vote_tracing.removeChild(vote_tracing.childNodes[0]);
+			}
+		}
+
+		function clear_form ()
+		{
+			txt_votes.value = "";
+			clear_votes ();
+		}
+
+		function calculate_ranked_choice ()
+		{
+			clear_votes ();
+
+			let hasPublic = chk_public.checked;
+			let separator = drp_separator.value;
+			let threshold = numud_threshold.value;
+			let voteText = txt_votes.value;
+
+			let votelines = voteText.split ("\n");
+
+			do_ranked_choice_voting (votelines, separator, threshold, [ ], hasPublic);
+		}
+
+		function do_ranked_choice_voting (votelines, separator, threshold, defeated, hasPublic)
+		{
+			new_round ();
+
+			var votes = { };
+			var tallied_votes = 0;
+
+			var line_count = 0;
+
+			for (var line of votelines)
+			{
+				++ line_count;
+				line = line.trim();
+
+				var voteline = line.split (separator);
+
+				if (line == "")
+				{
+					continue;
+				}
+
+				if (voteline == line)
+				{
+					window.alert ("No separator character found in '" + line + "'.  Aborting.");
+					throw new Error ("No separator character found in '" + line + "'.");
+				}
+
+				var voter_name;
+
+				if (hasPublic)
+				{
+					voter_name = voteline [0];
+					voteline = voteline.slice (1);
+				}
+				else
+				{
+					voter_name = "Line " + line_count;
+				}
+
+				for (var vote of voteline)
+				{
+					if (defeated.indexOf (vote) == -1)
+					{
+						if (Object.keys (votes).indexOf(vote) == -1)
+						{
+							votes[vote] = 1;
+						}
+						else
+						{
+							votes[vote] ++;
+						}
+
+						++ tallied_votes;
+
+						add_vote_tracing (voter_name, vote);
+
+						break;
+					}
+				};
+			};
+
+			if (tallied_votes == 0)
+			{
+				no_winner ();
+				return;
+			}
+
+			var vote_threshold = tallied_votes * threshold / 100.0;
+			var winner = null;
+			var fewest = Number.MAX_SAFE_INTEGER;
+
+			newline();
+
+			// Now see if someone has more than threshold% of the vote.
+			for (var votee of Object.keys(votes))
+			{
+				count_votes (votee, votes[votee]);
+
+				if (votes[votee] > vote_threshold)
+				{
+					winner = votee;
+				}
+				else
+				{
+					if (votes[votee] < fewest)
+					{
+						fewest = votes[votee];
+					}
+				}
+
+			}
+
+			if (winner)
+			{
+				print_winner (winner, votes [winner]);
+			}
+			else
+			{
+				// Add to "defeated" the people who received a non-zero lowest number of votes.
+				for (var votee of Object.keys (votes))
+				{
+					if (votes[votee] == fewest)
+					{
+						defeated.push (votee);
+					}
+				}
+
+				newline ();
+				newline ();
+				do_ranked_choice_voting (votelines, separator, threshold, defeated, hasPublic);
+			}
+		}
+
+		function add_vote_tracing (voter, votee)
+		{
+			var text = document.createTextNode (voter + " votes for " + votee + ".");
+			vote_tracing.appendChild (text);
+			newline ();
+		}
+
+		function count_votes (votee, votes)
+		{
+			var text = document.createTextNode (votee + " has received " + votes + " vote" + (votes == 1 ? "" : "s") + ".");
+			vote_tracing.appendChild (text);
+			newline ();
+		}
+
+		function new_round ()
+		{
+			vote_tracing.appendChild (document.createTextNode ("A new round of voting begins."));
+			newline ();
+		}
+
+		function no_winner ()
+		{
+			vote_tracing.appendChild (document.createTextNode ("No votes were cast in this round, all candidates were eliminated."));
+			newline ();
+		}
+
+		function print_winner (winner, votes)
+		{
+			vote_tracing.appendChild (document.createTextNode (winner + " has won the election, receiving " + votes + " in the round."));
+		}
+
+		function newline ()
+		{
+			vote_tracing.appendChild (document.createElement("br"));
+		}
+	</script>
+</html>
