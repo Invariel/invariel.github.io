@@ -244,36 +244,45 @@
 				do_ranked_choice_voting (votelines, separator, threshold, defeated, hasPublic);
 			}
 		}
+		
+		function create_text_node (text)
+		{
+			return document.createTextNode (text);
+		}
 
 		function add_vote_tracing (voter, votee)
 		{
-			var text = document.createTextNode (voter + " votes for " + votee + ".");
-			vote_tracing.appendChild (text);
+			vote_tracing.appendChild (create_text_node (voter + " votes for " + votee + "."));
 			newline ();
 		}
 
 		function count_votes (votee, votes)
 		{
-			var text = document.createTextNode (votee + " has received " + votes + " vote" + (votes == 1 ? "" : "s") + ".");
-			vote_tracing.appendChild (text);
+			vote_tracing.appendChild (create_text_node (votee + " has received " + votes + " vote" + (votes == 1 ? "" : "s") + "."));
 			newline ();
 		}
 
 		function new_round ()
 		{
-			vote_tracing.appendChild (document.createTextNode ("A new round of voting begins."));
+			vote_tracing.appendChild (create_text_node ("A new round of voting begins."));
 			newline ();
 		}
 
 		function no_winner ()
 		{
-			vote_tracing.appendChild (document.createTextNode ("No votes were cast in this round, all candidates were eliminated."));
+			vote_tracing.appendChild (create_text_node ("No votes were cast in this round, all candidates were eliminated."));
 			newline ();
+		}
+		
+		function print_defeated (defeatee, votes)
+		{
+			vote_tracing.appendChild (create_text_node (defeatee + " has been defeated, receiving " + votes + " vote" + (votes == 1 ? "" : "s") + " this round."));
+			newline();
 		}
 
 		function print_winner (winner, votes)
 		{
-			vote_tracing.appendChild (document.createTextNode (winner + " has won the election, receiving " + votes + " in the round."));
+			vote_tracing.appendChild (create_text_node (winner + " has won the election, receiving " + votes + " in the round."));
 		}
 
 		function newline ()
