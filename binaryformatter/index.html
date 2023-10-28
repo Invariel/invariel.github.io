@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Binary Formatter</title>
+
+		<style>
+			input[type="number"]
+			{
+				width: 60px;
+			}
+		</style>
+	</head>
+
+	<body>
+    <h3>Formats an unbroken string of data into data that has the specified number of digits per value, and the number of values per line.</h3>
+    
+		<textarea cols="127" rows="25" id="inputText"></textarea>
+		<br />
+		<label for="digits"># Digits per Value</label>
+		<input type="number" min="2" max="16" id="digitsPerValue" />
+		<label for="row"># Values per Line</label>
+		<input type="number" min="1" id="valuesPerRow" />
+		<button onClick="process(); return false;">Process</button>
+		<hr width=50% />
+		<textarea cols="127" rows="25" id="outputText"></textarea>
+	</body>
+
+	<script>
+		let input = document.getElementById("inputText");
+		let output = document.getElementById("outputText");
+		let digitsPerValue = document.getElementById("digitsPerValue");
+		let valuesPerRow = document.getElementById("valuesPerRow");
+
+		function process ()
+		{
+			let inputText = input.value;
+			let outputText = "";
+
+			let digitsValue = digitsPerValue.value;
+			let rowsValue = valuesPerRow.value;
+
+			for (let c = 0; c < inputText.length; ++ c)
+			{
+				outputText += inputText[c];				
+
+				if (c % (digitsValue * rowsValue) == (digitsValue * rowsValue - 1) && c > 0)
+				{
+					outputText += "\n";
+				}
+				else if (c % digitsValue == digitsValue - 1 && c > 0)
+				{
+					outputText += " ";
+				}
+			}
+
+			output.value = outputText;
+		}
+	</script>
+</html>
